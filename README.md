@@ -191,7 +191,7 @@
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
-      gtag('config', '375953757');
+      gtag('config', 'G-Y2HKZZT832');
     </script>
 </head>
 <body class="min-h-screen">
