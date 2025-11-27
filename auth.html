@@ -170,26 +170,35 @@
             }
 
             // Registrar nuevo usuario
-            registerUser(name, email, password) {
-                // Verificar si el email ya existe
-                if (this.users.find(user => user.email === email)) {
-                    return { success: false, message: 'Este correo electrónico ya está registrado' };
-                }
+// En la función registerUser del UserManager en AUTH.html
+registerUser(name, email, password) {
+    // Verificar si el email ya existe
+    if (this.users.find(user => user.email === email)) {
+        return { success: false, message: 'Este correo electrónico ya está registrado' };
+    }
 
-                // Crear nuevo usuario
-                const newUser = {
-                    id: Date.now().toString(),
-                    name: name,
-                    email: email,
-                    password: password, // En una app real, esto debería estar hasheado
-                    createdAt: new Date().toISOString()
-                };
+    // Crear nuevo usuario
+    const newUser = {
+        id: Date.now().toString(),
+        name: name,
+        email: email,
+        password: password,
+        createdAt: new Date().toISOString()
+    };
 
-                this.users.push(newUser);
-                this.saveUsersToStorage();
-                
-                return { success: true, message: 'Usuario registrado exitosamente', user: newUser };
-            }
+    this.users.push(newUser);
+    this.saveUsersToStorage();
+    
+    // GA4 - Evento de registro
+    if (typeof gtag !== 'undefined') {
+        gtag('event', 'sign_up', { 
+            method: 'nerdstore_form',
+            email: email
+        });
+    }
+    
+    return { success: true, message: 'Usuario registrado exitosamente', user: newUser };
+}
 
             // Iniciar sesión
             loginUser(email, password) {
