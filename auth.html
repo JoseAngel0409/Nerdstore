@@ -1,80 +1,43 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Iniciar Sesión / Registrarse - NerdStore</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <!-- Google Analytics -->
+    <!-- Google Analytics PRIMERO -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-Y2HKZZT832"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
         function gtag(){dataLayer.push(arguments);}
         gtag('js', new Date());
         gtag('config', 'G-Y2HKZZT832');
+        console.log('Google Analytics inicializado');
     </script>
+    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iniciar Sesión / Registrarse - NerdStore</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <style>
+        /* Tus estilos existentes... */
         body {
             font-family: sans-serif;
-            -webkit-font-smoothing: auto;
-            -moz-font-smoothing: auto;
-            -moz-osx-font-smoothing: grayscale;
-            font-smoothing: auto;
-            text-rendering: optimizeLegibility;
-            font-smooth: always;
-            -webkit-tap-highlight-color: transparent;
-            -webkit-touch-callout: none;
             background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 50%, #0a0a0a 100%);
             color: #e2e8f0;
             min-height: 100vh;
         }
-        
         .auth-card {
             background: rgba(30, 41, 59, 0.8);
             backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.1);
         }
-        
         .input-field {
             background: rgba(15, 23, 42, 0.7);
             border: 1px solid rgba(255, 255, 255, 0.1);
             color: #e2e8f0;
         }
-        
-        .input-field:focus {
-            border-color: #6366f1;
-            box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
-        }
-        
-        .input-field::placeholder {
-            color: #94a3b8;
-        }
-        
-        .logo-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin-bottom: 1.5rem;
-        }
-        
-        .error-message {
-            color: #ef4444;
-            font-size: 0.875rem;
-            margin-top: 0.25rem;
-            display: none;
-        }
-        
-        .success-message {
-            color: #10b981;
-            font-size: 0.875rem;
-            margin-top: 0.25rem;
-            display: none;
-        }
     </style>
 </head>
 <body class="min-h-screen flex items-center justify-center p-4">
-    <div class="auth-card rounded-3xl shadow-2xl p-8 w-full max-w-md transform transition-all duration-300 scale-95 opacity-0" id="authContent">
-        <!-- Sección de imagen del logo -->
+    <div class="auth-card rounded-3xl shadow-2xl p-8 w-full max-w-md" id="authContent">
+        <!-- Tu contenido existente... -->
         <div class="logo-container">
             <img src="C:\Users\josea\OneDrive\Escritorio\INg\Imagenes\logo.png" 
                  alt="NerdStore" 
@@ -87,24 +50,21 @@
         <p class="text-gray-300 text-center mb-6">Inicia sesión o regístrate para continuar</p>
 
         <div class="flex justify-center mb-6">
-            <button id="showLogin" class="px-6 py-3 rounded-l-full font-bold text-lg transition duration-300" style="background-color: #6366F1; color: white;">Iniciar Sesión</button>
-            <button id="showRegister" class="px-6 py-3 rounded-r-full font-bold text-lg transition duration-300" style="background-color: #374151; color: #9CA3AF;">Registrarse</button>
+            <button id="showLogin" class="px-6 py-3 rounded-l-full font-bold text-lg transition duration-300 bg-indigo-600 text-white">Iniciar Sesión</button>
+            <button id="showRegister" class="px-6 py-3 rounded-r-full font-bold text-lg transition duration-300 bg-gray-700 text-gray-300">Registrarse</button>
         </div>
 
         <!-- Login Form -->
         <form id="loginForm" class="space-y-4">
             <div>
                 <label for="loginEmail" class="block text-gray-300 text-sm font-bold mb-2">Correo Electrónico:</label>
-                <input type="email" id="loginEmail" class="input-field shadow-sm appearance-none border rounded-xl w-full py-3 px-4 leading-tight focus:outline-none focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-500 transition duration-300" placeholder="tu@email.com" required>
-                <div id="loginEmailError" class="error-message">Por favor ingresa un email válido</div>
+                <input type="email" id="loginEmail" class="input-field w-full py-3 px-4 rounded-xl" placeholder="tu@email.com" required>
             </div>
             <div>
                 <label for="loginPassword" class="block text-gray-300 text-sm font-bold mb-2">Contraseña:</label>
-                <input type="password" id="loginPassword" class="input-field shadow-sm appearance-none border rounded-xl w-full py-3 px-4 leading-tight focus:outline-none focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-500 transition duration-300" placeholder="••••••••" required>
-                <div id="loginPasswordError" class="error-message">La contraseña es requerida</div>
+                <input type="password" id="loginPassword" class="input-field w-full py-3 px-4 rounded-xl" placeholder="••••••••" required>
             </div>
-            <div id="loginGeneralError" class="error-message text-center"></div>
-            <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-6 rounded-full shadow-lg transition duration-300 ease-in-out transform hover:scale-105">
+            <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-6 rounded-full transition duration-300">
                 Iniciar Sesión
             </button>
         </form>
@@ -113,37 +73,45 @@
         <form id="registerForm" class="space-y-4 hidden">
             <div>
                 <label for="registerName" class="block text-gray-300 text-sm font-bold mb-2">Nombre de Usuario:</label>
-                <input type="text" id="registerName" class="input-field shadow-sm appearance-none border rounded-xl w-full py-3 px-4 leading-tight focus:outline-none focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-500 transition duration-300" placeholder="TuNombreDeUsuario" required>
-                <div id="registerNameError" class="error-message">El nombre de usuario es requerido</div>
+                <input type="text" id="registerName" class="input-field w-full py-3 px-4 rounded-xl" placeholder="TuNombreDeUsuario" required>
             </div>
             <div>
                 <label for="registerEmail" class="block text-gray-300 text-sm font-bold mb-2">Correo Electrónico:</label>
-                <input type="email" id="registerEmail" class="input-field shadow-sm appearance-none border rounded-xl w-full py-3 px-4 leading-tight focus:outline-none focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-500 transition duration-300" placeholder="tu@email.com" required>
-                <div id="registerEmailError" class="error-message">Por favor ingresa un email válido</div>
+                <input type="email" id="registerEmail" class="input-field w-full py-3 px-4 rounded-xl" placeholder="tu@email.com" required>
             </div>
             <div>
                 <label for="registerPassword" class="block text-gray-300 text-sm font-bold mb-2">Contraseña:</label>
-                <input type="password" id="registerPassword" class="input-field shadow-sm appearance-none border rounded-xl w-full py-3 px-4 leading-tight focus:outline-none focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-500 transition duration-300" placeholder="••••••••" required minlength="6">
-                <div id="registerPasswordError" class="error-message">La contraseña debe tener al menos 6 caracteres</div>
+                <input type="password" id="registerPassword" class="input-field w-full py-3 px-4 rounded-xl" placeholder="••••••••" required minlength="6">
             </div>
             <div>
                 <label for="confirmPassword" class="block text-gray-300 text-sm font-bold mb-2">Confirmar Contraseña:</label>
-                <input type="password" id="confirmPassword" class="input-field shadow-sm appearance-none border rounded-xl w-full py-3 px-4 leading-tight focus:outline-none focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-500 transition duration-300" placeholder="••••••••" required>
-                <div id="confirmPasswordError" class="error-message">Las contraseñas no coinciden</div>
+                <input type="password" id="confirmPassword" class="input-field w-full py-3 px-4 rounded-xl" placeholder="••••••••" required>
             </div>
-            <div id="registerGeneralError" class="error-message text-center"></div>
-            <div id="registerSuccess" class="success-message text-center"></div>
-            <button type="submit" class="w-full bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-6 rounded-full shadow-lg transition duration-300 ease-in-out transform hover:scale-105">
+            <button type="submit" class="w-full bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-6 rounded-full transition duration-300">
                 Registrarse
             </button>
         </form>
 
-        <button type="button" onclick="window.location.href='index.html'" class="w-full bg-gray-700 hover:bg-gray-600 text-gray-200 font-bold py-3 px-6 rounded-full shadow-md transition duration-300 ease-in-out transform hover:scale-105 mt-6">
+        <button type="button" onclick="window.location.href='index.html'" class="w-full bg-gray-700 hover:bg-gray-600 text-gray-200 font-bold py-3 px-6 rounded-full mt-6">
             Volver a la Tienda
         </button>
     </div>
 
     <script>
+        // Función helper para enviar eventos a GA4
+        function sendGAEvent(eventName, parameters = {}) {
+            console.log(`Enviando evento: ${eventName}`, parameters);
+            
+            if (typeof gtag === 'function') {
+                gtag('event', eventName, parameters);
+                console.log(`✅ Evento ${eventName} enviado correctamente`);
+                return true;
+            } else {
+                console.error(`❌ No se pudo enviar evento ${eventName}: gtag no disponible`);
+                return false;
+            }
+        }
+
         // Sistema de gestión de usuarios
         class UserManager {
             constructor() {
@@ -151,24 +119,20 @@
                 this.currentUser = this.getCurrentUserFromStorage();
             }
 
-            // Obtener usuarios del localStorage
             getUsersFromStorage() {
                 const users = localStorage.getItem('nerdstore_users');
                 return users ? JSON.parse(users) : [];
             }
 
-            // Obtener usuario actual del localStorage
             getCurrentUserFromStorage() {
                 const user = localStorage.getItem('nerdstore_current_user');
                 return user ? JSON.parse(user) : null;
             }
 
-            // Guardar usuarios en localStorage
             saveUsersToStorage() {
                 localStorage.setItem('nerdstore_users', JSON.stringify(this.users));
             }
 
-            // Guardar usuario actual en localStorage
             saveCurrentUserToStorage(user) {
                 if (user) {
                     localStorage.setItem('nerdstore_current_user', JSON.stringify(user));
@@ -177,37 +141,31 @@
                 }
             }
 
-            // Registrar nuevo usuario
             registerUser(name, email, password) {
-                // Verificar si el email ya existe
                 if (this.users.find(user => user.email === email)) {
                     return { success: false, message: 'Este correo electrónico ya está registrado' };
                 }
 
-                // Crear nuevo usuario
                 const newUser = {
                     id: Date.now().toString(),
                     name: name,
                     email: email,
-                    password: password, // En una app real, esto debería estar hasheado
+                    password: password,
                     createdAt: new Date().toISOString()
                 };
 
                 this.users.push(newUser);
                 this.saveUsersToStorage();
                 
-                // GA4 - Evento de registro exitoso
-                if (typeof gtag !== 'undefined') {
-                    gtag('event', 'sign_up', { 
-                        method: 'nerdstore_form',
-                        user_id: newUser.id
-                    });
-                }
+                // GA4 - Evento de registro
+                sendGAEvent('sign_up', { 
+                    method: 'nerdstore_form',
+                    user_id: newUser.id
+                });
                 
                 return { success: true, message: 'Usuario registrado exitosamente', user: newUser };
             }
 
-            // Iniciar sesión
             loginUser(email, password) {
                 const user = this.users.find(user => user.email === email && user.password === password);
                 
@@ -215,32 +173,25 @@
                     this.currentUser = user;
                     this.saveCurrentUserToStorage(user);
                     
-                    // GA4 - Evento de inicio de sesión exitoso
-                    if (typeof gtag !== 'undefined') {
-                        gtag('event', 'login', { 
-                            method: 'nerdstore_form',
-                            user_id: user.id
-                        });
-                    }
+                    // GA4 - Evento de inicio de sesión
+                    sendGAEvent('login', { 
+                        method: 'nerdstore_form',
+                        user_id: user.id
+                    });
                     
                     return { success: true, message: 'Inicio de sesión exitoso', user: user };
                 } else {
-                    // GA4 - Evento de fallo en inicio de sesión
-                    if (typeof gtag !== 'undefined') {
-                        gtag('event', 'login_failed', { 
-                            method: 'nerdstore_form'
-                        });
-                    }
+                    sendGAEvent('login_failed', { 
+                        method: 'nerdstore_form'
+                    });
                     
                     return { success: false, message: 'Correo electrónico o contraseña incorrectos' };
                 }
             }
 
-            // Cerrar sesión
             logout() {
-                // GA4 - Evento de cierre de sesión
-                if (typeof gtag !== 'undefined' && this.currentUser) {
-                    gtag('event', 'logout', { 
+                if (this.currentUser) {
+                    sendGAEvent('logout', { 
                         user_id: this.currentUser.id
                     });
                 }
@@ -249,266 +200,102 @@
                 this.saveCurrentUserToStorage(null);
             }
 
-            // Verificar si hay usuario logueado
             isLoggedIn() {
                 return this.currentUser !== null;
             }
 
-            // Obtener usuario actual
             getCurrentUser() {
                 return this.currentUser;
             }
         }
 
-        // Inicializar el gestor de usuarios
-        const userManager = new UserManager();
-
+        // Inicializar cuando el DOM esté listo
         document.addEventListener('DOMContentLoaded', () => {
-            const authContent = document.getElementById('authContent');
+            const userManager = new UserManager();
             const showLoginButton = document.getElementById('showLogin');
             const showRegisterButton = document.getElementById('showRegister');
             const loginForm = document.getElementById('loginForm');
             const registerForm = document.getElementById('registerForm');
 
-            // Elementos de error y éxito
-            const loginGeneralError = document.getElementById('loginGeneralError');
-            const registerGeneralError = document.getElementById('registerGeneralError');
-            const registerSuccess = document.getElementById('registerSuccess');
-
-            // Animate the modal in
-            setTimeout(() => {
-                authContent.classList.remove('scale-95', 'opacity-0');
-                authContent.classList.add('scale-100', 'opacity-100');
-            }, 50);
+            // Enviar evento de página vista
+            sendGAEvent('page_view', {
+                page_title: 'Página de Autenticación',
+                page_location: window.location.href
+            });
 
             function showForm(formToShow) {
                 if (formToShow === 'login') {
                     loginForm.classList.remove('hidden');
                     registerForm.classList.add('hidden');
-                    showLoginButton.style.backgroundColor = '#6366F1';
-                    showLoginButton.style.color = 'white';
-                    showRegisterButton.style.backgroundColor = '#374151';
-                    showRegisterButton.style.color = '#9CA3AF';
+                    showLoginButton.className = 'px-6 py-3 rounded-l-full font-bold text-lg transition duration-300 bg-indigo-600 text-white';
+                    showRegisterButton.className = 'px-6 py-3 rounded-r-full font-bold text-lg transition duration-300 bg-gray-700 text-gray-300';
                     
-                    // GA4 - Evento de visualización de formulario de login
-                    if (typeof gtag !== 'undefined') {
-                        gtag('event', 'view_login_form');
-                    }
-                    
-                    // Limpiar mensajes
-                    clearMessages();
+                    sendGAEvent('view_login_form');
                 } else {
                     loginForm.classList.add('hidden');
                     registerForm.classList.remove('hidden');
-                    showLoginButton.style.backgroundColor = '#374151';
-                    showLoginButton.style.color = '#9CA3AF';
-                    showRegisterButton.style.backgroundColor = '#6366F1';
-                    showRegisterButton.style.color = 'white';
+                    showLoginButton.className = 'px-6 py-3 rounded-l-full font-bold text-lg transition duration-300 bg-gray-700 text-gray-300';
+                    showRegisterButton.className = 'px-6 py-3 rounded-r-full font-bold text-lg transition duration-300 bg-indigo-600 text-white';
                     
-                    // GA4 - Evento de visualización de formulario de registro
-                    if (typeof gtag !== 'undefined') {
-                        gtag('event', 'view_sign_up_form');
-                    }
-                    
-                    // Limpiar mensajes
-                    clearMessages();
+                    sendGAEvent('view_sign_up_form');
                 }
-            }
-
-            function clearMessages() {
-                loginGeneralError.style.display = 'none';
-                registerGeneralError.style.display = 'none';
-                registerSuccess.style.display = 'none';
-                
-                // Limpiar errores de campos individuales
-                document.querySelectorAll('.error-message').forEach(msg => {
-                    msg.style.display = 'none';
-                });
-            }
-
-            function showError(element, message) {
-                element.textContent = message;
-                element.style.display = 'block';
-            }
-
-            function showSuccess(element, message) {
-                element.textContent = message;
-                element.style.display = 'block';
-            }
-
-            // Validación de email
-            function isValidEmail(email) {
-                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-                return emailRegex.test(email);
             }
 
             showLoginButton.addEventListener('click', () => showForm('login'));
             showRegisterButton.addEventListener('click', () => showForm('register'));
 
-            // Login Form Submission
+            // Login
             loginForm.addEventListener('submit', (e) => {
                 e.preventDefault();
-                clearMessages();
-
                 const email = document.getElementById('loginEmail').value;
                 const password = document.getElementById('loginPassword').value;
 
-                let isValid = true;
-
-                // Validaciones
-                if (!isValidEmail(email)) {
-                    showError(document.getElementById('loginEmailError'), 'Por favor ingresa un email válido');
-                    isValid = false;
-                }
-
-                if (!password) {
-                    showError(document.getElementById('loginPasswordError'), 'La contraseña es requerida');
-                    isValid = false;
-                }
-
-                if (!isValid) return;
-
-                // GA4 - Evento de intento de inicio de sesión
-                if (typeof gtag !== 'undefined') {
-                    gtag('event', 'login_attempt', { 
-                        method: 'nerdstore_form'
-                    });
-                }
-
-                // Intentar login
+                sendGAEvent('login_attempt');
+                
                 const result = userManager.loginUser(email, password);
-
+                
                 if (result.success) {
-                    // GA4 - Evento de inicio de sesión exitoso (también se envía desde UserManager)
-                    if (typeof gtag !== 'undefined') {
-                        gtag('event', 'login_success', { 
-                            method: 'nerdstore_form',
-                            user_id: result.user.id
-                        });
-                    }
-                    
-                    alert(`¡Bienvenido de vuelta, ${result.user.name}! Has iniciado sesión con éxito.`);
-                    
-                    // Redirigir después de un breve delay
-                    setTimeout(() => {
-                        window.location.href = 'index.html';
-                    }, 1000);
+                    sendGAEvent('login_success');
+                    alert(`¡Bienvenido de vuelta, ${result.user.name}!`);
+                    setTimeout(() => window.location.href = 'index.html', 1000);
                 } else {
-                    showError(loginGeneralError, result.message);
+                    alert(result.message);
                 }
             });
 
-            // Register Form Submission
+            // Registro
             registerForm.addEventListener('submit', (e) => {
                 e.preventDefault();
-                clearMessages();
-
                 const name = document.getElementById('registerName').value;
                 const email = document.getElementById('registerEmail').value;
                 const password = document.getElementById('registerPassword').value;
                 const confirmPassword = document.getElementById('confirmPassword').value;
 
-                let isValid = true;
-
-                // Validaciones
-                if (!name) {
-                    showError(document.getElementById('registerNameError'), 'El nombre de usuario es requerido');
-                    isValid = false;
-                }
-
-                if (!isValidEmail(email)) {
-                    showError(document.getElementById('registerEmailError'), 'Por favor ingresa un email válido');
-                    isValid = false;
-                }
-
-                if (password.length < 6) {
-                    showError(document.getElementById('registerPasswordError'), 'La contraseña debe tener al menos 6 caracteres');
-                    isValid = false;
-                }
-
                 if (password !== confirmPassword) {
-                    showError(document.getElementById('confirmPasswordError'), 'Las contraseñas no coinciden');
-                    isValid = false;
+                    alert('Las contraseñas no coinciden');
+                    return;
                 }
 
-                if (!isValid) return;
-
-                // GA4 - Evento de intento de registro
-                if (typeof gtag !== 'undefined') {
-                    gtag('event', 'sign_up_attempt', { 
-                        method: 'nerdstore_form'
-                    });
-                }
-
-                // Registrar usuario
+                sendGAEvent('sign_up_attempt');
+                
                 const result = userManager.registerUser(name, email, password);
-
+                
                 if (result.success) {
-                    // GA4 - Evento de registro exitoso (también se envía desde UserManager)
-                    if (typeof gtag !== 'undefined') {
-                        gtag('event', 'sign_up_success', { 
-                            method: 'nerdstore_form',
-                            user_id: result.user.id
-                        });
-                    }
-                    
-                    showSuccess(registerSuccess, '¡Cuenta creada exitosamente! Ahora puedes iniciar sesión.');
-                    
-                    // Limpiar formulario
-                    registerForm.reset();
-                    
-                    // Cambiar a formulario de login después de 2 segundos
-                    setTimeout(() => {
-                        showForm('login');
-                        // Pre-llenar el email en el login
-                        document.getElementById('loginEmail').value = email;
-                    }, 2000);
+                    sendGAEvent('sign_up_success');
+                    alert('¡Cuenta creada exitosamente!');
+                    showForm('login');
+                    document.getElementById('loginEmail').value = email;
                 } else {
-                    // GA4 - Evento de fallo en registro
-                    if (typeof gtag !== 'undefined') {
-                        gtag('event', 'sign_up_failed', { 
-                            method: 'nerdstore_form',
-                            reason: 'email_already_exists'
-                        });
-                    }
-                    
-                    showError(registerGeneralError, result.message);
+                    sendGAEvent('sign_up_failed');
+                    alert(result.message);
                 }
             });
 
-            // Validación en tiempo real para confirmación de contraseña
-            document.getElementById('confirmPassword').addEventListener('input', function() {
-                const password = document.getElementById('registerPassword').value;
-                const confirmPassword = this.value;
-                const errorElement = document.getElementById('confirmPasswordError');
-
-                if (confirmPassword && password !== confirmPassword) {
-                    showError(errorElement, 'Las contraseñas no coinciden');
-                } else {
-                    errorElement.style.display = 'none';
-                }
-            });
-
-            // GA4 - Evento de visualización de página de autenticación
-            if (typeof gtag !== 'undefined') {
-                gtag('event', 'page_view', {
-                    page_title: 'Página de Autenticación',
-                    page_location: window.location.href
-                });
-            }
-
-            // Initial form display
+            // Mostrar formulario de login por defecto
             showForm('login');
-
-            // Si ya hay un usuario logueado, redirigir
-            if (userManager.isLoggedIn()) {
-                setTimeout(() => {
-                    window.location.href = 'index.html';
-                }, 1000);
-            }
         });
     </script>
 </body>
 </html>
-</html>
+
 
