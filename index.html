@@ -13,6 +13,15 @@
     <link rel="manifest" href="manifest.json">
     <link rel="icon" href="icons/icon-192x192.png">
     <link rel="apple-touch-icon" href="icons/icon-192x192.png">
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-Y2HKZZT832"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-Y2HKZZT832');
+</script>
+
+    
 
     <style>
         /* Tus estilos CSS existentes... */
@@ -1098,8 +1107,29 @@
         });
 
         // CHECKOUT MEJORADO - CON VERIFICACIÓN
-        checkoutButton.addEventListener('click', () => {
-            console.log('🛒 Botón de checkout clickeado');
+       checkoutButton.addEventListener('click', () => {
+    console.log('🛒 Botón de checkout clickeado');
+
+    if (cart.length === 0) {
+        alert('¡Tu carrito está vacío! No puedes pagar el aire, ¿o sí?');
+        return;
+    }
+
+    // GA4 - Evento "Begin Checkout"
+    gtag('event', 'begin_checkout', {
+        items: cart.map(item => ({
+            item_name: item.name,
+            price: item.price,
+            quantity: item.quantity
+        })),
+        value: total,
+        currency: 'MXN'
+    });
+
+    const currentUser = userManager.getCurrentUser();
+
+
+
             
             if (cart.length === 0) {
                 alert('¡Tu carrito está vacío! No puedes pagar el aire, ¿o sí?');
