@@ -5,6 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Iniciar Sesión / Registrarse - NerdStore</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-Y2HKZZT832"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-Y2HKZZT832');
+    </script>
     <style>
         body {
             font-family: sans-serif;
@@ -170,35 +178,34 @@
             }
 
             // Registrar nuevo usuario
-// En la función registerUser del UserManager en AUTH.html
-registerUser(name, email, password) {
-    // Verificar si el email ya existe
-    if (this.users.find(user => user.email === email)) {
-        return { success: false, message: 'Este correo electrónico ya está registrado' };
-    }
+            registerUser(name, email, password) {
+                // Verificar si el email ya existe
+                if (this.users.find(user => user.email === email)) {
+                    return { success: false, message: 'Este correo electrónico ya está registrado' };
+                }
 
-    // Crear nuevo usuario
-    const newUser = {
-        id: Date.now().toString(),
-        name: name,
-        email: email,
-        password: password,
-        createdAt: new Date().toISOString()
-    };
+                // Crear nuevo usuario
+                const newUser = {
+                    id: Date.now().toString(),
+                    name: name,
+                    email: email,
+                    password: password, // En una app real, esto debería estar hasheado
+                    createdAt: new Date().toISOString()
+                };
 
-    this.users.push(newUser);
-    this.saveUsersToStorage();
-    
-    // GA4 - Evento de registro
-    if (typeof gtag !== 'undefined') {
-        gtag('event', 'sign_up', { 
-            method: 'nerdstore_form',
-            email: email
-        });
-    }
-    
-    return { success: true, message: 'Usuario registrado exitosamente', user: newUser };
-}
+                this.users.push(newUser);
+                this.saveUsersToStorage();
+                
+                // GA4 - Evento de registro exitoso
+                if (typeof gtag !== 'undefined') {
+                    gtag('event', 'sign_up', { 
+                        method: 'nerdstore_form',
+                        user_id: newUser.id
+                    });
+                }
+                
+                return { success: true, message: 'Usuario registrado exitosamente', user: newUser };
+            }
 
             // Iniciar sesión
             loginUser(email, password) {
@@ -207,14 +214,37 @@ registerUser(name, email, password) {
                 if (user) {
                     this.currentUser = user;
                     this.saveCurrentUserToStorage(user);
+                    
+                    // GA4 - Evento de inicio de sesión exitoso
+                    if (typeof gtag !== 'undefined') {
+                        gtag('event', 'login', { 
+                            method: 'nerdstore_form',
+                            user_id: user.id
+                        });
+                    }
+                    
                     return { success: true, message: 'Inicio de sesión exitoso', user: user };
                 } else {
+                    // GA4 - Evento de fallo en inicio de sesión
+                    if (typeof gtag !== 'undefined') {
+                        gtag('event', 'login_failed', { 
+                            method: 'nerdstore_form'
+                        });
+                    }
+                    
                     return { success: false, message: 'Correo electrónico o contraseña incorrectos' };
                 }
             }
 
             // Cerrar sesión
             logout() {
+                // GA4 - Evento de cierre de sesión
+                if (typeof gtag !== 'undefined' && this.currentUser) {
+                    gtag('event', 'logout', { 
+                        user_id: this.currentUser.id
+                    });
+                }
+                
                 this.currentUser = null;
                 this.saveCurrentUserToStorage(null);
             }
@@ -260,6 +290,11 @@ registerUser(name, email, password) {
                     showRegisterButton.style.backgroundColor = '#374151';
                     showRegisterButton.style.color = '#9CA3AF';
                     
+                    // GA4 - Evento de visualización de formulario de login
+                    if (typeof gtag !== 'undefined') {
+                        gtag('event', 'view_login_form');
+                    }
+                    
                     // Limpiar mensajes
                     clearMessages();
                 } else {
@@ -269,6 +304,11 @@ registerUser(name, email, password) {
                     showLoginButton.style.color = '#9CA3AF';
                     showRegisterButton.style.backgroundColor = '#6366F1';
                     showRegisterButton.style.color = 'white';
+                    
+                    // GA4 - Evento de visualización de formulario de registro
+                    if (typeof gtag !== 'undefined') {
+                        gtag('event', 'view_sign_up_form');
+                    }
                     
                     // Limpiar mensajes
                     clearMessages();
@@ -328,12 +368,31 @@ registerUser(name, email, password) {
 
                 if (!isValid) return;
 
+                // GA4 - Evento de intento de inicio de sesión
+                if (typeof gtag !== 'undefined') {
+                    gtag('event', 'login_attempt', { 
+                        method: 'nerdstore_form'
+                    });
+                }
+
                 // Intentar login
                 const result = userManager.loginUser(email, password);
 
                 if (result.success) {
+                    // GA4 - Evento de inicio de sesión exitoso (también se envía desde UserManager)
+                    if (typeof gtag !== 'undefined') {
+                        gtag('event', 'login_success', { 
+                            method: 'nerdstore_form',
+                            user_id: result.user.id
+                        });
+                    }
+                    
                     alert(`¡Bienvenido de vuelta, ${result.user.name}! Has iniciado sesión con éxito.`);
-                    window.location.href = 'index.html';
+                    
+                    // Redirigir después de un breve delay
+                    setTimeout(() => {
+                        window.location.href = 'index.html';
+                    }, 1000);
                 } else {
                     showError(loginGeneralError, result.message);
                 }
@@ -374,10 +433,25 @@ registerUser(name, email, password) {
 
                 if (!isValid) return;
 
+                // GA4 - Evento de intento de registro
+                if (typeof gtag !== 'undefined') {
+                    gtag('event', 'sign_up_attempt', { 
+                        method: 'nerdstore_form'
+                    });
+                }
+
                 // Registrar usuario
                 const result = userManager.registerUser(name, email, password);
 
                 if (result.success) {
+                    // GA4 - Evento de registro exitoso (también se envía desde UserManager)
+                    if (typeof gtag !== 'undefined') {
+                        gtag('event', 'sign_up_success', { 
+                            method: 'nerdstore_form',
+                            user_id: result.user.id
+                        });
+                    }
+                    
                     showSuccess(registerSuccess, '¡Cuenta creada exitosamente! Ahora puedes iniciar sesión.');
                     
                     // Limpiar formulario
@@ -390,6 +464,14 @@ registerUser(name, email, password) {
                         document.getElementById('loginEmail').value = email;
                     }, 2000);
                 } else {
+                    // GA4 - Evento de fallo en registro
+                    if (typeof gtag !== 'undefined') {
+                        gtag('event', 'sign_up_failed', { 
+                            method: 'nerdstore_form',
+                            reason: 'email_already_exists'
+                        });
+                    }
+                    
                     showError(registerGeneralError, result.message);
                 }
             });
@@ -407,11 +489,26 @@ registerUser(name, email, password) {
                 }
             });
 
+            // GA4 - Evento de visualización de página de autenticación
+            if (typeof gtag !== 'undefined') {
+                gtag('event', 'page_view', {
+                    page_title: 'Página de Autenticación',
+                    page_location: window.location.href
+                });
+            }
+
             // Initial form display
             showForm('login');
 
             // Si ya hay un usuario logueado, redirigir
+            if (userManager.isLoggedIn()) {
+                setTimeout(() => {
+                    window.location.href = 'index.html';
+                }, 1000);
+            }
         });
     </script>
 </body>
 </html>
+</html>
+
