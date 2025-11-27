@@ -186,6 +186,13 @@
             display: none;
         }
     </style>
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-ABC123DEF"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', '375953757');
+    </script>
 </head>
 <body class="min-h-screen">
     <!-- Desktop Sidebar -->
