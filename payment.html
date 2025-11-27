@@ -5,6 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pago - NerdStore</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-Y2HKZZT832"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-Y2HKZZT832');
+    </script>
     <style>
         body {
             font-family: sans-serif;
@@ -231,11 +239,71 @@
             });
 
             payButton.addEventListener('click', (e) => {
-                e.preventDefault(); // Prevent form submission
+                e.preventDefault();
+                
+                const checkoutCartString = sessionStorage.getItem('checkoutCart');
+                const cartTotal = sessionStorage.getItem('cartTotal');
+                let checkoutCart = [];
+                
+                if (checkoutCartString) {
+                    checkoutCart = JSON.parse(checkoutCartString);
+                }
+                
                 const selectedMethod = paymentMethodSelect.value;
+                
+                // GA4 - Evento de inicio de pago
+                if (typeof gtag !== 'undefined') {
+                    gtag('event', 'begin_checkout', {
+                        currency: 'MXN',
+                        value: parseFloat(cartTotal),
+                        items: checkoutCart.map(item => ({
+                            item_id: item.id,
+                            item_name: item.name,
+                            price: item.price,
+                            quantity: item.quantity
+                        }))
+                    });
+
+                    // GA4 - Evento de selección de método de pago
+                    gtag('event', 'add_payment_info', {
+                        currency: 'MXN',
+                        value: parseFloat(cartTotal),
+                        payment_type: selectedMethod,
+                        items: checkoutCart.map(item => ({
+                            item_id: item.id,
+                            item_name: item.name,
+                            price: item.price,
+                            quantity: item.quantity
+                        }))
+                    });
+                }
+                
                 alert(`¡Felicidades! Tu "compra" ha sido "procesada" con el método "${selectedMethod}". ¡Disfruta de tus productos imaginarios!`);
-                // Optionally redirect back to the main page or a confirmation page
-                window.location.href = 'index.html';
+                
+                // GA4 - Evento de compra exitosa
+                if (typeof gtag !== 'undefined') {
+                    gtag('event', 'purchase', {
+                        transaction_id: 'PAYMENT_' + Date.now().toString(),
+                        currency: 'MXN',
+                        value: parseFloat(cartTotal),
+                        payment_type: selectedMethod,
+                        items: checkoutCart.map(item => ({
+                            item_id: item.id,
+                            item_name: item.name,
+                            price: item.price,
+                            quantity: item.quantity
+                        }))
+                    });
+                }
+                
+                // Limpiar el carrito después del pago
+                sessionStorage.removeItem('checkoutCart');
+                sessionStorage.removeItem('cartTotal');
+                
+                // Redirigir a la página principal
+                setTimeout(() => {
+                    window.location.href = 'index.html';
+                }, 1000);
             });
             
             // Format card number input
@@ -253,6 +321,14 @@
                 }
                 e.target.value = value;
             });
+
+            // GA4 - Evento de visualización de página de pago
+            if (typeof gtag !== 'undefined') {
+                gtag('event', 'page_view', {
+                    page_title: 'Página de Pago',
+                    page_location: window.location.href
+                });
+            }
         });
     </script>
 </body>
