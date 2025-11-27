@@ -1857,5 +1857,1322 @@
             }
         });
     </script>
+
+
+
+    <!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iniciar Sesión / Registrarse - NerdStore</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: sans-serif;
+            -webkit-font-smoothing: auto;
+            -moz-font-smoothing: auto;
+            -moz-osx-font-smoothing: grayscale;
+            font-smoothing: auto;
+            text-rendering: optimizeLegibility;
+            font-smooth: always;
+            -webkit-tap-highlight-color: transparent;
+            -webkit-touch-callout: none;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 50%, #0a0a0a 100%);
+            color: #e2e8f0;
+            min-height: 100vh;
+        }
+        
+        .auth-card {
+            background: rgba(30, 41, 59, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .input-field {
+            background: rgba(15, 23, 42, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #e2e8f0;
+        }
+        
+        .input-field:focus {
+            border-color: #6366f1;
+            box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
+        }
+        
+        .input-field::placeholder {
+            color: #94a3b8;
+        }
+        
+        .logo-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .error-message {
+            color: #ef4444;
+            font-size: 0.875rem;
+            margin-top: 0.25rem;
+            display: none;
+        }
+        
+        .success-message {
+            color: #10b981;
+            font-size: 0.875rem;
+            margin-top: 0.25rem;
+            display: none;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-4">
+    <div class="auth-card rounded-3xl shadow-2xl p-8 w-full max-w-md transform transition-all duration-300 scale-95 opacity-0" id="authContent">
+        <!-- Sección de imagen del logo -->
+        <div class="logo-container">
+            <img src="C:\Users\josea\OneDrive\Escritorio\INg\Imagenes\logo.png" 
+                 alt="NerdStore" 
+                 class="w-64 h-64 object-contain rounded-xl">
+        </div>
+
+        <h1 class="text-2xl font-bold text-white mb-2 text-center">
+            ¡Bienvenido a NerdStore!
+        </h1>
+        <p class="text-gray-300 text-center mb-6">Inicia sesión o regístrate para continuar</p>
+
+        <div class="flex justify-center mb-6">
+            <button id="showLogin" class="px-6 py-3 rounded-l-full font-bold text-lg transition duration-300" style="background-color: #6366F1; color: white;">Iniciar Sesión</button>
+            <button id="showRegister" class="px-6 py-3 rounded-r-full font-bold text-lg transition duration-300" style="background-color: #374151; color: #9CA3AF;">Registrarse</button>
+        </div>
+
+        <!-- Login Form -->
+        <form id="loginForm" class="space-y-4">
+            <div>
+                <label for="loginEmail" class="block text-gray-300 text-sm font-bold mb-2">Correo Electrónico:</label>
+                <input type="email" id="loginEmail" class="input-field shadow-sm appearance-none border rounded-xl w-full py-3 px-4 leading-tight focus:outline-none focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-500 transition duration-300" placeholder="tu@email.com" required>
+                <div id="loginEmailError" class="error-message">Por favor ingresa un email válido</div>
+            </div>
+            <div>
+                <label for="loginPassword" class="block text-gray-300 text-sm font-bold mb-2">Contraseña:</label>
+                <input type="password" id="loginPassword" class="input-field shadow-sm appearance-none border rounded-xl w-full py-3 px-4 leading-tight focus:outline-none focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-500 transition duration-300" placeholder="••••••••" required>
+                <div id="loginPasswordError" class="error-message">La contraseña es requerida</div>
+            </div>
+            <div id="loginGeneralError" class="error-message text-center"></div>
+            <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-6 rounded-full shadow-lg transition duration-300 ease-in-out transform hover:scale-105">
+                Iniciar Sesión
+            </button>
+        </form>
+
+        <!-- Register Form -->
+        <form id="registerForm" class="space-y-4 hidden">
+            <div>
+                <label for="registerName" class="block text-gray-300 text-sm font-bold mb-2">Nombre de Usuario:</label>
+                <input type="text" id="registerName" class="input-field shadow-sm appearance-none border rounded-xl w-full py-3 px-4 leading-tight focus:outline-none focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-500 transition duration-300" placeholder="TuNombreDeUsuario" required>
+                <div id="registerNameError" class="error-message">El nombre de usuario es requerido</div>
+            </div>
+            <div>
+                <label for="registerEmail" class="block text-gray-300 text-sm font-bold mb-2">Correo Electrónico:</label>
+                <input type="email" id="registerEmail" class="input-field shadow-sm appearance-none border rounded-xl w-full py-3 px-4 leading-tight focus:outline-none focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-500 transition duration-300" placeholder="tu@email.com" required>
+                <div id="registerEmailError" class="error-message">Por favor ingresa un email válido</div>
+            </div>
+            <div>
+                <label for="registerPassword" class="block text-gray-300 text-sm font-bold mb-2">Contraseña:</label>
+                <input type="password" id="registerPassword" class="input-field shadow-sm appearance-none border rounded-xl w-full py-3 px-4 leading-tight focus:outline-none focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-500 transition duration-300" placeholder="••••••••" required minlength="6">
+                <div id="registerPasswordError" class="error-message">La contraseña debe tener al menos 6 caracteres</div>
+            </div>
+            <div>
+                <label for="confirmPassword" class="block text-gray-300 text-sm font-bold mb-2">Confirmar Contraseña:</label>
+                <input type="password" id="confirmPassword" class="input-field shadow-sm appearance-none border rounded-xl w-full py-3 px-4 leading-tight focus:outline-none focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-500 transition duration-300" placeholder="••••••••" required>
+                <div id="confirmPasswordError" class="error-message">Las contraseñas no coinciden</div>
+            </div>
+            <div id="registerGeneralError" class="error-message text-center"></div>
+            <div id="registerSuccess" class="success-message text-center"></div>
+            <button type="submit" class="w-full bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-6 rounded-full shadow-lg transition duration-300 ease-in-out transform hover:scale-105">
+                Registrarse
+            </button>
+        </form>
+
+        <button type="button" onclick="window.location.href='index.html'" class="w-full bg-gray-700 hover:bg-gray-600 text-gray-200 font-bold py-3 px-6 rounded-full shadow-md transition duration-300 ease-in-out transform hover:scale-105 mt-6">
+            Volver a la Tienda
+        </button>
+    </div>
+
+    <script>
+        // Sistema de gestión de usuarios
+        class UserManager {
+            constructor() {
+                this.users = this.getUsersFromStorage();
+                this.currentUser = this.getCurrentUserFromStorage();
+            }
+
+            // Obtener usuarios del localStorage
+            getUsersFromStorage() {
+                const users = localStorage.getItem('nerdstore_users');
+                return users ? JSON.parse(users) : [];
+            }
+
+            // Obtener usuario actual del localStorage
+            getCurrentUserFromStorage() {
+                const user = localStorage.getItem('nerdstore_current_user');
+                return user ? JSON.parse(user) : null;
+            }
+
+            // Guardar usuarios en localStorage
+            saveUsersToStorage() {
+                localStorage.setItem('nerdstore_users', JSON.stringify(this.users));
+            }
+
+            // Guardar usuario actual en localStorage
+            saveCurrentUserToStorage(user) {
+                if (user) {
+                    localStorage.setItem('nerdstore_current_user', JSON.stringify(user));
+                } else {
+                    localStorage.removeItem('nerdstore_current_user');
+                }
+            }
+
+            // Registrar nuevo usuario
+            registerUser(name, email, password) {
+                // Verificar si el email ya existe
+                if (this.users.find(user => user.email === email)) {
+                    return { success: false, message: 'Este correo electrónico ya está registrado' };
+                }
+
+                // Crear nuevo usuario
+                const newUser = {
+                    id: Date.now().toString(),
+                    name: name,
+                    email: email,
+                    password: password, // En una app real, esto debería estar hasheado
+                    createdAt: new Date().toISOString()
+                };
+
+                this.users.push(newUser);
+                this.saveUsersToStorage();
+                
+                return { success: true, message: 'Usuario registrado exitosamente', user: newUser };
+            }
+
+            // Iniciar sesión
+            loginUser(email, password) {
+                const user = this.users.find(user => user.email === email && user.password === password);
+                
+                if (user) {
+                    this.currentUser = user;
+                    this.saveCurrentUserToStorage(user);
+                    return { success: true, message: 'Inicio de sesión exitoso', user: user };
+                } else {
+                    return { success: false, message: 'Correo electrónico o contraseña incorrectos' };
+                }
+            }
+
+            // Cerrar sesión
+            logout() {
+                this.currentUser = null;
+                this.saveCurrentUserToStorage(null);
+            }
+
+            // Verificar si hay usuario logueado
+            isLoggedIn() {
+                return this.currentUser !== null;
+            }
+
+            // Obtener usuario actual
+            getCurrentUser() {
+                return this.currentUser;
+            }
+        }
+
+        // Inicializar el gestor de usuarios
+        const userManager = new UserManager();
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const authContent = document.getElementById('authContent');
+            const showLoginButton = document.getElementById('showLogin');
+            const showRegisterButton = document.getElementById('showRegister');
+            const loginForm = document.getElementById('loginForm');
+            const registerForm = document.getElementById('registerForm');
+
+            // Elementos de error y éxito
+            const loginGeneralError = document.getElementById('loginGeneralError');
+            const registerGeneralError = document.getElementById('registerGeneralError');
+            const registerSuccess = document.getElementById('registerSuccess');
+
+            // Animate the modal in
+            setTimeout(() => {
+                authContent.classList.remove('scale-95', 'opacity-0');
+                authContent.classList.add('scale-100', 'opacity-100');
+            }, 50);
+
+            function showForm(formToShow) {
+                if (formToShow === 'login') {
+                    loginForm.classList.remove('hidden');
+                    registerForm.classList.add('hidden');
+                    showLoginButton.style.backgroundColor = '#6366F1';
+                    showLoginButton.style.color = 'white';
+                    showRegisterButton.style.backgroundColor = '#374151';
+                    showRegisterButton.style.color = '#9CA3AF';
+                    
+                    // Limpiar mensajes
+                    clearMessages();
+                } else {
+                    loginForm.classList.add('hidden');
+                    registerForm.classList.remove('hidden');
+                    showLoginButton.style.backgroundColor = '#374151';
+                    showLoginButton.style.color = '#9CA3AF';
+                    showRegisterButton.style.backgroundColor = '#6366F1';
+                    showRegisterButton.style.color = 'white';
+                    
+                    // Limpiar mensajes
+                    clearMessages();
+                }
+            }
+
+            function clearMessages() {
+                loginGeneralError.style.display = 'none';
+                registerGeneralError.style.display = 'none';
+                registerSuccess.style.display = 'none';
+                
+                // Limpiar errores de campos individuales
+                document.querySelectorAll('.error-message').forEach(msg => {
+                    msg.style.display = 'none';
+                });
+            }
+
+            function showError(element, message) {
+                element.textContent = message;
+                element.style.display = 'block';
+            }
+
+            function showSuccess(element, message) {
+                element.textContent = message;
+                element.style.display = 'block';
+            }
+
+            // Validación de email
+            function isValidEmail(email) {
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                return emailRegex.test(email);
+            }
+
+            showLoginButton.addEventListener('click', () => showForm('login'));
+            showRegisterButton.addEventListener('click', () => showForm('register'));
+
+            // Login Form Submission
+            loginForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                clearMessages();
+
+                const email = document.getElementById('loginEmail').value;
+                const password = document.getElementById('loginPassword').value;
+
+                let isValid = true;
+
+                // Validaciones
+                if (!isValidEmail(email)) {
+                    showError(document.getElementById('loginEmailError'), 'Por favor ingresa un email válido');
+                    isValid = false;
+                }
+
+                if (!password) {
+                    showError(document.getElementById('loginPasswordError'), 'La contraseña es requerida');
+                    isValid = false;
+                }
+
+                if (!isValid) return;
+
+                // Intentar login
+                const result = userManager.loginUser(email, password);
+
+                if (result.success) {
+                    alert(`¡Bienvenido de vuelta, ${result.user.name}! Has iniciado sesión con éxito.`);
+                    window.location.href = 'index.html';
+                } else {
+                    showError(loginGeneralError, result.message);
+                }
+            });
+
+            // Register Form Submission
+            registerForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                clearMessages();
+
+                const name = document.getElementById('registerName').value;
+                const email = document.getElementById('registerEmail').value;
+                const password = document.getElementById('registerPassword').value;
+                const confirmPassword = document.getElementById('confirmPassword').value;
+
+                let isValid = true;
+
+                // Validaciones
+                if (!name) {
+                    showError(document.getElementById('registerNameError'), 'El nombre de usuario es requerido');
+                    isValid = false;
+                }
+
+                if (!isValidEmail(email)) {
+                    showError(document.getElementById('registerEmailError'), 'Por favor ingresa un email válido');
+                    isValid = false;
+                }
+
+                if (password.length < 6) {
+                    showError(document.getElementById('registerPasswordError'), 'La contraseña debe tener al menos 6 caracteres');
+                    isValid = false;
+                }
+
+                if (password !== confirmPassword) {
+                    showError(document.getElementById('confirmPasswordError'), 'Las contraseñas no coinciden');
+                    isValid = false;
+                }
+
+                if (!isValid) return;
+
+                // Registrar usuario
+                const result = userManager.registerUser(name, email, password);
+
+                if (result.success) {
+                    showSuccess(registerSuccess, '¡Cuenta creada exitosamente! Ahora puedes iniciar sesión.');
+                    
+                    // Limpiar formulario
+                    registerForm.reset();
+                    
+                    // Cambiar a formulario de login después de 2 segundos
+                    setTimeout(() => {
+                        showForm('login');
+                        // Pre-llenar el email en el login
+                        document.getElementById('loginEmail').value = email;
+                    }, 2000);
+                } else {
+                    showError(registerGeneralError, result.message);
+                }
+            });
+
+            // Validación en tiempo real para confirmación de contraseña
+            document.getElementById('confirmPassword').addEventListener('input', function() {
+                const password = document.getElementById('registerPassword').value;
+                const confirmPassword = this.value;
+                const errorElement = document.getElementById('confirmPasswordError');
+
+                if (confirmPassword && password !== confirmPassword) {
+                    showError(errorElement, 'Las contraseñas no coinciden');
+                } else {
+                    errorElement.style.display = 'none';
+                }
+            });
+
+            // Initial form display
+            showForm('login');
+
+            // Si ya hay un usuario logueado, redirigir
+        });
+    </script>
+</body>
+</html>
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pago - NerdStore</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: sans-serif;
+            -webkit-font-smoothing: auto;
+            -moz-font-smoothing: auto;
+            -moz-osx-font-smoothing: grayscale;
+            font-smoothing: auto;
+            text-rendering: optimizeLegibility;
+            font-smooth: always;
+            -webkit-tap-highlight-color: transparent;
+            -webkit-touch-callout: none;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 50%, #0a0a0a 100%);
+            color: #e2e8f0;
+            min-height: 100vh;
+        }
+        h1 {
+            font-size: 1.5rem;
+        }
+        .payment-method-content {
+            display: none;
+        }
+        .payment-method-content.active {
+            display: block;
+        }
+        
+        /* Estilos para elementos en modo oscuro */
+        .payment-card {
+            background: rgba(30, 41, 59, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .summary-box {
+            background: rgba(30, 41, 59, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .input-field {
+            background: rgba(15, 23, 42, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #e2e8f0;
+        }
+        
+        .input-field:focus {
+            border-color: #6366f1;
+            box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
+        }
+        
+        .input-field::placeholder {
+            color: #94a3b8;
+        }
+        
+        /* Scrollbar personalizado */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(30, 41, 59, 0.5);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #4f46e5;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #6366f1;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center">
+    <div class="payment-card rounded-3xl shadow-2xl p-8 w-full max-w-md transform transition-all duration-300 scale-95 opacity-0" id="paymentContent">
+        <h1 class="text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-400 mb-6 text-center">
+            ¡Casi lo logras!
+        </h1>
+        <p class="text-gray-300 text-lg mb-4 text-center">Estás a un paso de "adquirir" tus productos.</p>
+
+        <div class="summary-box p-6 rounded-xl mb-6 shadow-inner">
+            <h2 class="text-2xl font-bold text-white mb-3">Resumen de tu Compra:</h2>
+            <div id="selectedProductsList" class="space-y-3 mb-4 max-h-48 overflow-y-auto pr-2">
+                <!-- Products will be injected here -->
+            </div>
+            <p class="text-3xl font-extrabold text-green-400 text-center">Total a Pagar: <span id="paymentTotal">$0.00</span></p>
+        </div>
+
+        <div class="mb-6">
+            <label for="paymentMethod" class="block text-gray-300 text-sm font-bold mb-2">Selecciona tu "Método de Pago":</label>
+            <select id="paymentMethod" class="input-field shadow-sm appearance-none border rounded-xl w-full py-3 px-4 leading-tight focus:outline-none focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-500 transition duration-300">
+                <option value="creditCard">Tarjeta de Crédito</option>
+                <option value="transfer">Transferencia Bancaria</option>
+                <option value="mercadoPago">Mercado Pago</option>
+                <option value="oxxo">Oxxo</option>
+            </select>
+        </div>
+
+        <form class="space-y-5">
+            <!-- Credit Card Fields -->
+            <div id="creditCardContent" class="payment-method-content active">
+                <div>
+                    <label for="cardNumber" class="block text-gray-300 text-sm font-bold mb-2">Número de Tarjeta:</label>
+                    <input type="text" id="cardNumber" class="input-field shadow-sm appearance-none border rounded-xl w-full py-3 px-4 leading-tight focus:outline-none focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-500 transition duration-300" placeholder="XXXX XXXX XXXX XXXX" maxlength="19">
+                </div>
+                <div class="flex space-x-4">
+                    <div class="w-1/2">
+                        <label for="expiryDate" class="block text-gray-300 text-sm font-bold mb-2">Fecha de Vencimiento:</label>
+                        <input type="text" id="expiryDate" class="input-field shadow-sm appearance-none border rounded-xl w-full py-3 px-4 leading-tight focus:outline-none focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-500 transition duration-300" placeholder="MM/AA" maxlength="5">
+                    </div>
+                    <div class="w-1/2">
+                        <label for="cvv" class="block text-gray-300 text-sm font-bold mb-2">CVV:</label>
+                        <input type="text" id="cvv" class="input-field shadow-sm appearance-none border rounded-xl w-full py-3 px-4 leading-tight focus:outline-none focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-500 transition duration-300" placeholder="XXX" maxlength="4">
+                    </div>
+                </div>
+                <div>
+                    <label for="cardName" class="block text-gray-300 text-sm font-bold mb-2">Nombre en la Tarjeta:</label>
+                    <input type="text" id="cardName" class="input-field shadow-sm appearance-none border rounded-xl w-full py-3 px-4 leading-tight focus:outline-none focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-500 transition duration-300" placeholder="Nombre Completo">
+                </div>
+            </div>
+
+            <!-- Transferencia Bancaria Fields -->
+            <div id="transferContent" class="payment-method-content">
+                <p class="text-gray-300 text-center mb-4">Por favor, realiza una transferencia a los siguientes datos bancarios:</p>
+                <div class="bg-gray-800 p-4 rounded-xl space-y-2">
+                    <p><strong class="text-white">Banco:</strong> <span class="text-gray-300">Banco Nerd</span></p>
+                    <p><strong class="text-white">Cuenta:</strong> <span class="text-gray-300">1234567890</span></p>
+                    <p><strong class="text-white">CLABE:</strong> <span class="text-gray-300">012345678901234567</span></p>
+                    <p><strong class="text-white">Beneficiario:</strong> <span class="text-gray-300">NerdStore S.A. de C.V.</span></p>
+                </div>
+            </div>
+
+            <!-- Mercado Pago Fields -->
+            <div id="mercadoPagoContent" class="payment-method-content">
+                <p class="text-gray-300 text-center mb-4">Serás redirigido a la plataforma de Mercado Pago para completar tu "pago".</p>
+                <div class="bg-gray-800 p-4 rounded-xl text-center">
+                    <img src="https://www.alianzafrancesaxalapa.edu.mx/wp-content/uploads/2020/04/scan-afx.png" alt="Mercado Pago Logo" class="mx-auto mb-2">                </div>
+            </div>
+
+            <!-- Oxxo Fields -->
+            <div id="oxxoContent" class="payment-method-content">
+                <p class="text-gray-300 text-center mb-4">Genera tu código de barra" para pagar en cualquier tienda Oxxo.</p>
+                <div class="bg-gray-800 p-4 rounded-xl text-center">
+                    <img src="https://elsembradorministries.com/esne-secure/mobile-donations/images/oxxo-movil.png" alt="Código de Barras Oxxo" class="mx-auto mb-2">
+                    <p class="text-sm text-gray-400">¡Este es tu código para ir al Oxxo más cercano!</p>
+                </div>
+            </div>
+
+            <!-- Common fields for all methods -->
+            <div>
+                <label for="address" class="block text-gray-300 text-sm font-bold mb-2">Dirección:</label>
+                <input type="text" id="address" class="input-field shadow-sm appearance-none border rounded-xl w-full py-3 px-4 leading-tight focus:outline-none focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-500 transition duration-300" placeholder="Calle, número, colonia">
+            </div>
+            <div>
+                <label for="postalCode" class="block text-gray-300 text-sm font-bold mb-2">Código Postal:</label>
+                <input type="text" id="postalCode" class="input-field shadow-sm appearance-none border rounded-xl w-full py-3 px-4 leading-tight focus:outline-none focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-500 transition duration-300" placeholder="XXXXX" maxlength="5">
+            </div>
+            <button type="submit" id="payButton" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-6 rounded-full shadow-lg transition duration-300 ease-in-out transform hover:scale-105">
+                Pagar Ahora
+            </button>
+            <button type="button" onclick="window.location.href='index.html'" class="w-full bg-gray-700 hover:bg-gray-600 text-gray-200 font-bold py-3 px-6 rounded-full shadow-md transition duration-300 ease-in-out transform hover:scale-105 mt-3">
+                Volver a la Tienda
+            </button>
+        </form>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const paymentContent = document.getElementById('paymentContent');
+            const paymentTotalSpan = document.getElementById('paymentTotal');
+            const selectedProductsList = document.getElementById('selectedProductsList');
+            const payButton = document.getElementById('payButton');
+            const paymentMethodSelect = document.getElementById('paymentMethod');
+            const paymentMethodContents = document.querySelectorAll('.payment-method-content');
+
+            // Animate the modal in
+            setTimeout(() => {
+                paymentContent.classList.remove('scale-95', 'opacity-0');
+                paymentContent.classList.add('scale-100', 'opacity-100');
+            }, 50);
+
+            const checkoutCartString = sessionStorage.getItem('checkoutCart');
+            let checkoutCart = [];
+            if (checkoutCartString) {
+                checkoutCart = JSON.parse(checkoutCartString);
+            }
+
+            let total = 0;
+            if (checkoutCart.length > 0) {
+                checkoutCart.forEach(item => {
+                    const itemElement = document.createElement('div');
+                    itemElement.className = 'flex items-center bg-gray-800 p-3 rounded-lg shadow-sm';
+                    itemElement.innerHTML = `
+                        <img src="${item.image}" alt="${item.name}" class="w-12 h-12 object-cover rounded-md mr-3">
+                        <div class="flex-1">
+                            <span class="font-semibold text-white block">${item.name}</span>
+                            <span class="text-gray-400 text-sm">Cantidad: ${item.quantity}</span>
+                        </div>
+                        <span class="font-bold text-white">$${(item.price * item.quantity).toFixed(2)}</span>
+                    `;
+                    selectedProductsList.appendChild(itemElement);
+                    total += item.price * item.quantity;
+                });
+            } else {
+                const listItem = document.createElement('p');
+                listItem.className = 'text-center text-gray-400';
+                listItem.textContent = 'No hay productos seleccionados. ¡Qué raro!';
+                selectedProductsList.appendChild(listItem);
+            }
+            paymentTotalSpan.textContent = `$${total.toFixed(2)}`;
+
+            // Function to show/hide payment method content
+            function showPaymentMethodContent(method) {
+                paymentMethodContents.forEach(content => {
+                    content.classList.remove('active');
+                });
+                document.getElementById(method + 'Content').classList.add('active');
+            }
+
+            // Initial display based on default selected option
+            showPaymentMethodContent(paymentMethodSelect.value);
+
+            // Event listener for payment method change
+            paymentMethodSelect.addEventListener('change', (e) => {
+                showPaymentMethodContent(e.target.value);
+            });
+
+            payButton.addEventListener('click', (e) => {
+                e.preventDefault(); // Prevent form submission
+                const selectedMethod = paymentMethodSelect.value;
+                alert(`¡Felicidades! Tu "compra" ha sido "procesada" con el método "${selectedMethod}". ¡Disfruta de tus productos imaginarios!`);
+                // Optionally redirect back to the main page or a confirmation page
+                window.location.href = 'index.html';
+            });
+            
+            // Format card number input
+            document.getElementById('cardNumber').addEventListener('input', function(e) {
+                let value = e.target.value.replace(/\s+/g, '').replace(/[^0-9]/gi, '');
+                let formattedValue = value.match(/.{1,4}/g)?.join(' ') || value;
+                e.target.value = formattedValue;
+            });
+            
+            // Format expiry date input
+            document.getElementById('expiryDate').addEventListener('input', function(e) {
+                let value = e.target.value.replace(/\s+/g, '').replace(/[^0-9]/gi, '');
+                if (value.length >= 2) {
+                    value = value.substring(0, 2) + '/' + value.substring(2, 4);
+                }
+                e.target.value = value;
+            });
+        });
+    </script>
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Perfil - NerdStore</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Mismo fondo que el index */
+        body {
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 50%, #0a0a0a 100%);
+            color: #e2e8f0;
+            min-height: 100vh;
+        }
+
+        .desktop-sidebar {
+            width: 250px;
+            position: fixed;
+            z-index: 10;
+            top: 0;
+            left: 0;
+            height: 100%;
+            background: linear-gradient(to bottom, #1e293b, #0f172a);
+            padding-top: 20px;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.3);
+            transition: all 0.3s ease;
+            overflow-x: hidden;
+        }
+        
+        .desktop-sidebar a, .desktop-sidebar button {
+            padding: 16px 20px;
+            text-decoration: none;
+            font-size: 16px;
+            color: #cbd5e1;
+            display: flex;
+            align-items: center;
+            transition: all 0.3s ease;
+            width: 100%;
+            border: none;
+            background: transparent;
+            text-align: left;
+            cursor: pointer;
+        }
+        
+        .desktop-sidebar a:hover, .desktop-sidebar button:hover {
+            background-color: rgba(99, 102, 241, 0.2);
+            color: #818cf8;
+        }
+        
+        .menu-icon {
+            min-width: 24px;
+            text-align: center;
+            font-size: 18px;
+            transition: all 0.3s ease;
+        }
+        
+        .sidebar-collapsed .desktop-sidebar {
+            width: 70px;
+        }
+        
+        .sidebar-collapsed .desktop-sidebar a,
+        .sidebar-collapsed .desktop-sidebar button {
+            padding: 16px 0;
+            justify-content: center;
+        }
+        
+        .sidebar-collapsed .desktop-sidebar span:not(.menu-icon) {
+            display: none;
+        }
+        
+        .sidebar-collapsed .menu-icon {
+            margin-right: 0;
+            font-size: 20px;
+        }
+        
+        .sidebar-toggle {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            z-index: 20;
+            background-color: #6366F1;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.4);
+            transition: all 0.3s ease;
+        }
+        
+        .hidden {
+            display: none;
+        }
+
+        /* Estilos para el perfil */
+        .profile-card {
+            background: rgba(30, 41, 59, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .letterbox-item {
+            background: rgba(30, 41, 59, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .letterbox-item:hover {
+            transform: translateY(-5px);
+            border-color: #6366f1;
+            box-shadow: 0 10px 25px rgba(99, 102, 241, 0.2);
+        }
+
+        .section-title {
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .user-avatar {
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            color: white;
+            margin: 0 auto;
+        }
+
+        .stats-card {
+            background: rgba(30, 41, 59, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .stats-card:hover {
+            background: rgba(30, 41, 59, 0.8);
+            border-color: #6366f1;
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+    <!-- Desktop Sidebar -->
+    <div class="desktop-sidebar">
+        <a href="index.html">
+            <span class="menu-icon mr-3">🏠</span>
+            <span>Inicio</span>
+        </a>
+        <a href="index.html" onclick="showCatalog('game')">
+            <span class="menu-icon mr-3">🎮</span>
+            <span>Juegos</span>
+        </a>
+        <a href="index.html" onclick="showCatalog('music')">
+            <span class="menu-icon mr-3">🎵</span>
+            <span>Música</span>
+        </a>
+        <a href="profile.html" id="profileSidebarButton">
+            <span class="menu-icon mr-3">👤</span>
+            <span>Mi Perfil</span>
+        </a>
+        <a href="auth.html">
+            <span class="menu-icon mr-3">🔐</span>
+            <span>Iniciar Sesión</span>
+        </a>
+    </div>
+
+    <!-- Toggle Button -->
+    <button class="sidebar-toggle" onclick="toggleSidebar()">≡</button>
+
+    <div class="main-content" style="margin-left: 250px; transition: margin-left 0.3s ease;">
+        <div class="container mx-auto p-8 max-w-6xl">
+            <!-- Header -->
+            <header class="profile-card rounded-3xl shadow-xl p-6 mb-8 flex flex-col md:flex-row justify-between items-center">
+                <div class="flex items-center justify-between w-full md:w-auto mb-4 md:mb-0">
+                    <a href="index.html" class="text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-400 focus:outline-none hover:scale-105 transition duration-300">
+                        NerdStore 
+                    </a>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <button onclick="logout()" class="bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-6 rounded-full shadow-lg transition duration-300 ease-in-out transform hover:scale-105">
+                        Cerrar Sesión
+                    </button>
+                </div>
+            </header>
+
+            <!-- Información del Usuario -->
+            <div class="profile-card rounded-3xl shadow-xl p-8 mb-8">
+                <div class="text-center mb-8">
+                    <div class="user-avatar mb-4">
+                        <span id="userAvatar">👤</span>
+                    </div>
+                    <h1 id="userName" class="text-3xl font-bold text-white mb-2">Cargando...</h1>
+                    <p id="userEmail" class="text-gray-400 text-lg">cargando@ejemplo.com</p>
+                    <p id="memberSince" class="text-gray-500 text-sm mt-2">Miembro desde: Cargando...</p>
+                </div>
+
+                <!-- Estadísticas -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                    <div class="stats-card p-6 text-center">
+                        <div class="text-3xl font-bold text-indigo-400 mb-2" id="gamesCount">0</div>
+                        <div class="text-gray-400">Juegos Favoritos</div>
+                    </div>
+                    <div class="stats-card p-6 text-center">
+                        <div class="text-3xl font-bold text-purple-400 mb-2" id="musicCount">0</div>
+                        <div class="text-gray-400">Álbumes Favoritos</div>
+                    </div>
+                    <div class="stats-card p-6 text-center">
+                        <div class="text-3xl font-bold text-pink-400 mb-2" id="reviewsCount">0</div>
+                        <div class="text-gray-400">Reseñas Escritas</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Contenido Principal en Grid -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <!-- Juegos Favoritos -->
+                <div class="profile-card rounded-3xl shadow-xl p-6">
+                    <h2 class="text-2xl font-bold section-title mb-6">🎮 Mis Juegos Favoritos</h2>
+                    <div id="favoriteGames" class="space-y-4 max-h-96 overflow-y-auto pr-2">
+                        <div class="letterbox-item p-4">
+                            <div class="flex items-center space-x-4">
+                                <div class="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
+                                    <span class="text-white font-bold">🎯</span>
+                                </div>
+                                <div class="flex-1">
+                                    <h3 class="text-white font-semibold">Aún no tienes juegos favoritos</h3>
+                                    <p class="text-gray-400 text-sm">Tus juegos favoritos aparecerán aquí cuando los agregues desde la tienda</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Música Favorita -->
+                <div class="profile-card rounded-3xl shadow-xl p-6">
+                    <h2 class="text-2xl font-bold section-title mb-6">🎵 Mi Música Favorita</h2>
+                    <div id="favoriteMusic" class="space-y-4 max-h-96 overflow-y-auto pr-2">
+                        <div class="letterbox-item p-4">
+                            <div class="flex items-center space-x-4">
+                                <div class="w-16 h-16 bg-gradient-to-br from-green-500 to-blue-600 rounded-lg flex items-center justify-center">
+                                    <span class="text-white font-bold">🎵</span>
+                                </div>
+                                <div class="flex-1">
+                                    <h3 class="text-white font-semibold">Aún no tienes música favorita</h3>
+                                    <p class="text-gray-400 text-sm">Tus álbumes favoritos aparecerán aquí cuando los agregues desde la tienda</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Mis Reseñas -->
+                <div class="profile-card rounded-3xl shadow-xl p-6 lg:col-span-2">
+                    <h2 class="text-2xl font-bold section-title mb-6">📝 Mis Reseñas</h2>
+                    <div id="userReviews" class="space-y-4 max-h-96 overflow-y-auto pr-2">
+                        <div class="letterbox-item p-6">
+                            <div class="flex items-start space-x-4">
+                                <div class="w-12 h-12 bg-gradient-to-br from-yellow-500 to-orange-600 rounded-full flex items-center justify-center flex-shrink-0">
+                                    <span class="text-white font-bold">✍️</span>
+                                </div>
+                                <div class="flex-1">
+                                    <h3 class="text-white font-semibold mb-2">Aún no has escrito reseñas</h3>
+                                    <p class="text-gray-400">Cuando escribas reseñas de productos, aparecerán aquí para que otros usuarios las vean.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Historial de Compras -->
+                <div class="profile-card rounded-3xl shadow-xl p-6 lg:col-span-2">
+                    <h2 class="text-2xl font-bold section-title mb-6">🛒 Mi Historial de Compras</h2>
+                    <div id="purchaseHistory" class="space-y-4 max-h-96 overflow-y-auto pr-2">
+                        <div class="letterbox-item p-6">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center space-x-4">
+                                    <div class="w-12 h-12 bg-gradient-to-br from-gray-500 to-gray-700 rounded-lg flex items-center justify-center">
+                                        <span class="text-white font-bold">📦</span>
+                                    </div>
+                                    <div>
+                                        <h3 class="text-white font-semibold">Aún no has realizado compras</h3>
+                                        <p class="text-gray-400 text-sm">Tu historial de compras aparecerá aquí</p>
+                                    </div>
+                                </div>
+                                <div class="text-right">
+                                    <div class="text-gray-400 text-sm">Total: $0.00</div>
+                                    <div class="text-gray-500 text-xs">Fecha: --/--/----</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer class="bg-gray-900 text-gray-400 text-center p-6 mt-12 rounded-t-3xl shadow-inner">
+            <p>&copy; 2025 NerdStore. Todos los derechos reservados.</p>
+            <p class="text-sm text-gray-500 mt-2">Tu perfil personal en la mejor tienda de juegos y música</p>
+        </footer>
+    </div>
+
+    <script>
+        // Sistema de gestión de usuarios
+        class UserManager {
+            constructor() {
+                this.currentUser = this.getCurrentUserFromStorage();
+                this.users = this.getUsersFromStorage();
+            }
+
+            getCurrentUserFromStorage() {
+                const user = localStorage.getItem('nerdstore_current_user');
+                return user ? JSON.parse(user) : null;
+            }
+
+            getUsersFromStorage() {
+                const users = localStorage.getItem('nerdstore_users');
+                return users ? JSON.parse(users) : [];
+            }
+
+            logout() {
+                this.currentUser = null;
+                localStorage.removeItem('nerdstore_current_user');
+                window.location.href = 'index.html';
+            }
+
+            getCurrentUser() {
+                return this.currentUser;
+            }
+
+            // Obtener datos extendidos del usuario
+            getUserProfile(userId) {
+                const user = this.users.find(u => u.id === userId);
+                if (!user) return null;
+
+                // Inicializar arrays si no existen
+                if (!user.favoriteGames) user.favoriteGames = [];
+                if (!user.favoriteMusic) user.favoriteMusic = [];
+                if (!user.reviews) user.reviews = [];
+                if (!user.purchases) user.purchases = [];
+
+                return user;
+            }
+
+            // Guardar cambios en el usuario
+            saveUserProfile(user) {
+                const index = this.users.findIndex(u => u.id === user.id);
+                if (index !== -1) {
+                    this.users[index] = user;
+                    localStorage.setItem('nerdstore_users', JSON.stringify(this.users));
+                    
+                    // Actualizar usuario actual si es el mismo
+                    if (this.currentUser && this.currentUser.id === user.id) {
+                        this.currentUser = user;
+                        localStorage.setItem('nerdstore_current_user', JSON.stringify(user));
+                    }
+                }
+            }
+        }
+
+        // Inicializar el gestor de usuarios
+        const userManager = new UserManager();
+
+        // Función para cargar el perfil del usuario
+        function loadUserProfile() {
+            const currentUser = userManager.getCurrentUser();
+            
+            if (!currentUser) {
+                alert('No hay usuario logueado. Redirigiendo al inicio...');
+                window.location.href = 'index.html';
+                return;
+            }
+
+            const userProfile = userManager.getUserProfile(currentUser.id);
+            
+            // Actualizar información básica
+            document.getElementById('userName').textContent = userProfile.name;
+            document.getElementById('userEmail').textContent = userProfile.email;
+            document.getElementById('userAvatar').textContent = userProfile.name.charAt(0).toUpperCase();
+            
+            // Calcular fecha de miembro
+            const joinDate = new Date(userProfile.createdAt);
+            document.getElementById('memberSince').textContent = `Miembro desde: ${joinDate.toLocaleDateString('es-ES')}`;
+
+            // Cargar datos REALES del usuario
+            loadUserData(userProfile);
+        }
+
+        // Función para cargar datos REALES del usuario
+        function loadUserData(userProfile) {
+            // Estadísticas - Solo datos reales del usuario
+            document.getElementById('gamesCount').textContent = userProfile.favoriteGames.length;
+            document.getElementById('musicCount').textContent = userProfile.favoriteMusic.length;
+            document.getElementById('reviewsCount').textContent = userProfile.reviews.length;
+
+            // Juegos Favoritos - Solo datos del usuario
+            const gamesContainer = document.getElementById('favoriteGames');
+            gamesContainer.innerHTML = '';
+            
+            if (userProfile.favoriteGames.length > 0) {
+                userProfile.favoriteGames.forEach(game => {
+                    const gameElement = createMediaItem(game, 'game');
+                    gamesContainer.appendChild(gameElement);
+                });
+            } else {
+                gamesContainer.innerHTML = `
+                    <div class="letterbox-item p-4">
+                        <div class="flex items-center space-x-4">
+                            <div class="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
+                                <span class="text-white font-bold">🎯</span>
+                            </div>
+                            <div class="flex-1">
+                                <h3 class="text-white font-semibold">Aún no tienes juegos favoritos</h3>
+                                <p class="text-gray-400 text-sm">Tus juegos favoritos aparecerán aquí cuando los agregues desde la tienda</p>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            // Música Favorita - Solo datos del usuario
+            const musicContainer = document.getElementById('favoriteMusic');
+            musicContainer.innerHTML = '';
+            
+            if (userProfile.favoriteMusic.length > 0) {
+                userProfile.favoriteMusic.forEach(music => {
+                    const musicElement = createMediaItem(music, 'music');
+                    musicContainer.appendChild(musicElement);
+                });
+            } else {
+                musicContainer.innerHTML = `
+                    <div class="letterbox-item p-4">
+                        <div class="flex items-center space-x-4">
+                            <div class="w-16 h-16 bg-gradient-to-br from-green-500 to-blue-600 rounded-lg flex items-center justify-center">
+                                <span class="text-white font-bold">🎵</span>
+                            </div>
+                            <div class="flex-1">
+                                <h3 class="text-white font-semibold">Aún no tienes música favorita</h3>
+                                <p class="text-gray-400 text-sm">Tus álbumes favoritos aparecerán aquí cuando los agregues desde la tienda</p>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            // Reseñas - Solo datos del usuario
+            const reviewsContainer = document.getElementById('userReviews');
+            reviewsContainer.innerHTML = '';
+            
+            if (userProfile.reviews.length > 0) {
+                userProfile.reviews.forEach(review => {
+                    const reviewElement = createReviewItem(review);
+                    reviewsContainer.appendChild(reviewElement);
+                });
+            } else {
+                reviewsContainer.innerHTML = `
+                    <div class="letterbox-item p-6">
+                        <div class="flex items-start space-x-4">
+                            <div class="w-12 h-12 bg-gradient-to-br from-yellow-500 to-orange-600 rounded-full flex items-center justify-center flex-shrink-0">
+                                <span class="text-white font-bold">✍️</span>
+                            </div>
+                            <div class="flex-1">
+                                <h3 class="text-white font-semibold mb-2">Aún no has escrito reseñas</h3>
+                                <p class="text-gray-400">Cuando escribas reseñas de productos, aparecerán aquí para que otros usuarios las vean.</p>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            // Historial de Compras - Solo datos del usuario
+            const purchasesContainer = document.getElementById('purchaseHistory');
+            purchasesContainer.innerHTML = '';
+            
+            if (userProfile.purchases && userProfile.purchases.length > 0) {
+                userProfile.purchases.forEach(purchase => {
+                    const purchaseElement = createPurchaseItem(purchase);
+                    purchasesContainer.appendChild(purchaseElement);
+                });
+            } else {
+                purchasesContainer.innerHTML = `
+                    <div class="letterbox-item p-6">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-4">
+                                <div class="w-12 h-12 bg-gradient-to-br from-gray-500 to-gray-700 rounded-lg flex items-center justify-center">
+                                    <span class="text-white font-bold">📦</span>
+                                </div>
+                                <div>
+                                    <h3 class="text-white font-semibold">Aún no has realizado compras</h3>
+                                    <p class="text-gray-400 text-sm">Tu historial de compras aparecerá aquí</p>
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                <div class="text-gray-400 text-sm">Total: $0.00</div>
+                                <div class="text-gray-500 text-xs">Fecha: --/--/----</div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+        }
+
+        // Función para crear items de media (juegos/música)
+        function createMediaItem(item, type) {
+            const div = document.createElement('div');
+            div.className = 'letterbox-item p-4';
+            div.innerHTML = `
+                <div class="flex items-center space-x-4">
+                    <img src="${item.image}" alt="${item.name}" class="w-16 h-16 object-cover rounded-lg">
+                    <div class="flex-1">
+                        <h3 class="text-white font-semibold">${item.name}</h3>
+                        <p class="text-gray-400 text-sm">${type === 'game' ? '🎮 Videojuego' : '🎵 Álbum Musical'}</p>
+                        ${item.price ? `<p class="text-indigo-400 font-semibold">$${item.price.toFixed(2)}</p>` : ''}
+                    </div>
+                    <button onclick="removeFavorite('${item.id}', '${type}')" class="text-red-400 hover:text-red-300 transition duration-300 p-2 rounded-full hover:bg-red-900/20">
+                        ❌
+                    </button>
+                </div>
+            `;
+            return div;
+        }
+
+        // Función para crear items de reseñas
+        function createReviewItem(review) {
+            const div = document.createElement('div');
+            div.className = 'letterbox-item p-6';
+            
+            // Crear estrellas de rating
+            let stars = '';
+            for (let i = 0; i < 5; i++) {
+                stars += i < review.rating ? '⭐' : '☆';
+            }
+            
+            div.innerHTML = `
+                <div class="flex items-start space-x-4">
+                    <div class="w-12 h-12 bg-gradient-to-br from-yellow-500 to-orange-600 rounded-full flex items-center justify-center flex-shrink-0">
+                        <span class="text-white font-bold">✍️</span>
+                    </div>
+                    <div class="flex-1">
+                        <div class="flex justify-between items-start mb-2">
+                            <h3 class="text-white font-semibold">${review.product}</h3>
+                            <div class="text-yellow-400 text-sm">${stars}</div>
+                        </div>
+                        <p class="text-gray-300 mb-2">${review.text}</p>
+                        <p class="text-gray-500 text-sm">Publicado el ${new Date(review.date).toLocaleDateString('es-ES')}</p>
+                    </div>
+                    <button onclick="removeReview('${review.id}')" class="text-red-400 hover:text-red-300 transition duration-300 p-2 rounded-full hover:bg-red-900/20">
+                        ❌
+                    </button>
+                </div>
+            `;
+            return div;
+        }
+
+        // Función para crear items de compras
+        function createPurchaseItem(purchase) {
+            const div = document.createElement('div');
+            div.className = 'letterbox-item p-6';
+            
+            const total = purchase.items ? purchase.items.reduce((sum, item) => sum + (item.price * item.quantity), 0) : 0;
+            const date = new Date(purchase.date).toLocaleDateString('es-ES');
+            
+            div.innerHTML = `
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center space-x-4">
+                        <div class="w-12 h-12 bg-gradient-to-br from-green-500 to-green-700 rounded-lg flex items-center justify-center">
+                            <span class="text-white font-bold">📦</span>
+                        </div>
+                        <div>
+                            <h3 class="text-white font-semibold">Compra #${purchase.id.slice(-6)}</h3>
+                            <p class="text-gray-400 text-sm">${purchase.items ? purchase.items.length : 0} productos</p>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <div class="text-green-400 font-semibold">$${total.toFixed(2)}</div>
+                        <div class="text-gray-500 text-xs">${date}</div>
+                    </div>
+                </div>
+            `;
+            return div;
+        }
+
+        // Función para eliminar favoritos
+        function removeFavorite(id, type) {
+            if (confirm(`¿Estás seguro de que quieres eliminar este ${type === 'game' ? 'juego' : 'álbum'} de tus favoritos?`)) {
+                const currentUser = userManager.getCurrentUser();
+                const userProfile = userManager.getUserProfile(currentUser.id);
+                
+                if (type === 'game') {
+                    userProfile.favoriteGames = userProfile.favoriteGames.filter(game => game.id !== id);
+                } else {
+                    userProfile.favoriteMusic = userProfile.favoriteMusic.filter(music => music.id !== id);
+                }
+                
+                userManager.saveUserProfile(userProfile);
+                alert(`${type === 'game' ? 'Juego' : 'Álbum'} eliminado de favoritos`);
+                loadUserProfile(); // Recargar la página
+            }
+        }
+
+        // Función para eliminar reseñas
+        function removeReview(reviewId) {
+            if (confirm('¿Estás seguro de que quieres eliminar esta reseña?')) {
+                const currentUser = userManager.getCurrentUser();
+                const userProfile = userManager.getUserProfile(currentUser.id);
+                
+                userProfile.reviews = userProfile.reviews.filter(review => review.id !== reviewId);
+                userManager.saveUserProfile(userProfile);
+                alert('Reseña eliminada');
+                loadUserProfile(); // Recargar la página
+            }
+        }
+
+        // Función para cerrar sesión
+        function logout() {
+            if (confirm('¿Estás seguro de que quieres cerrar sesión?')) {
+                userManager.logout();
+            }
+        }
+
+        // Función para toggle sidebar
+        function toggleSidebar() {
+            document.body.classList.toggle('sidebar-collapsed');
+            const mainContent = document.querySelector('.main-content');
+            if (document.body.classList.contains('sidebar-collapsed')) {
+                mainContent.style.marginLeft = '70px';
+            } else {
+                mainContent.style.marginLeft = '250px';
+            }
+        }
+
+        // Inicializar la página cuando se carga
+        document.addEventListener('DOMContentLoaded', () => {
+            loadUserProfile();
+        });
+    </script>
 </body>
 </html>
