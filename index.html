@@ -6,14 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NerdStore - Tienda de Juegos y Música</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- METADATOS PWA -->
-    <meta name="theme-color" content="#6366F1">
-    <meta name="description" content="Tu tienda geek de videojuegos y música alternativa">
-    <link rel="manifest" href="manifest.json">
-    <link rel="icon" href="icons/icon-192x192.png">
-    <link rel="apple-touch-icon" href="icons/icon-192x192.png">
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-Y2HKZZT832"></script>
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-Y2HKZZT832"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
@@ -22,6 +15,12 @@
 </script>
 
     
+    <!-- METADATOS PWA -->
+    <meta name="theme-color" content="#6366F1">
+    <meta name="description" content="Tu tienda geek de videojuegos y música alternativa">
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" href="icons/icon-192x192.png">
+    <link rel="apple-touch-icon" href="icons/icon-192x192.png">
 
     <style>
         /* Tus estilos CSS existentes... */
@@ -1071,20 +1070,33 @@
             }, 300);
         });
 
-        addToCartDetailsButton.addEventListener('click', (e) => {
-            const productId = e.target.dataset.id;
-            const productToAdd = allProducts.find(p => p.id === productId);
-            const existingItem = cart.find(item => item.id === productId);
+   addToCartDetailsButton.addEventListener('click', (e) => {
+    const productId = e.target.dataset.id;
+    const productToAdd = allProducts.find(p => p.id === productId);
+    const existingItem = cart.find(item => item.id === productId);
 
-            if (existingItem) {
-                existingItem.quantity++;
-            } else {
-                cart.push({ ...productToAdd, quantity: 1 });
-            }
-            updateCartDisplay();
-            alert(`¡Éxito! "${productToAdd.name}" ha sido añadido a tu carrito de la fortuna. ¡Que lo "disfrutes"!`);
-            closeDetailsModal.click();
+    if (existingItem) {
+        existingItem.quantity++;
+    } else {
+        cart.push({ ...productToAdd, quantity: 1 });
+    }
+    updateCartDisplay();
+    
+    // GA4 - Evento de "Agregar al carrito"
+    if (typeof gtag !== 'undefined') {
+        gtag('event', 'add_to_cart', {
+            items: [{
+                item_id: productToAdd.id,
+                item_name: productToAdd.name,
+                price: productToAdd.price,
+                quantity: 1
+            }]
         });
+    }
+    
+    alert(`¡Éxito! "${productToAdd.name}" ha sido añadido a tu carrito de la fortuna. ¡Que lo "disfrutes"!`);
+    closeDetailsModal.click();
+});
 
         addToFavoritesDetailsButton.addEventListener('click', (e) => {
             const productId = e.target.dataset.id;
@@ -1107,73 +1119,83 @@
         });
 
         // CHECKOUT MEJORADO - CON VERIFICACIÓN
-       checkoutButton.addEventListener('click', () => {
+      // CHECKOUT MEJORADO - CON VERIFICACIÓN Y GA4
+checkoutButton.addEventListener('click', () => {
     console.log('🛒 Botón de checkout clickeado');
-
+    
     if (cart.length === 0) {
         alert('¡Tu carrito está vacío! No puedes pagar el aire, ¿o sí?');
         return;
     }
-
-    // GA4 - Evento "Begin Checkout"
-    gtag('event', 'begin_checkout', {
-        items: cart.map(item => ({
-            item_name: item.name,
-            price: item.price,
-            quantity: item.quantity
-        })),
-        value: total,
-        currency: 'MXN'
-    });
-
+    
+    console.log('📦 Productos en carrito:', cart);
+    
+    const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+    console.log('💰 Total calculado:', total);
+    
     const currentUser = userManager.getCurrentUser();
+    if (currentUser) {
+        console.log('👤 Usuario logueado:', currentUser.name);
+        const purchaseResult = userManager.addPurchase(currentUser.id, cart, total);
+        if (purchaseResult.success) {
+            console.log('✅ Compra guardada en historial');
 
-
-
-            
-            if (cart.length === 0) {
-                alert('¡Tu carrito está vacío! No puedes pagar el aire, ¿o sí?');
-                return;
+            // GA4 - Evento "Purchase"
+            if (typeof gtag !== 'undefined') {
+                gtag('event', 'purchase', {
+                    transaction_id: Date.now().toString(),
+                    value: total,
+                    currency: 'MXN',
+                    items: cart.map(item => ({
+                        item_id: item.id,
+                        item_name: item.name,
+                        price: item.price,
+                        quantity: item.quantity
+                    }))
+                });
             }
-            
-            console.log('📦 Productos en carrito:', cart);
-            
-            const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-            console.log('💰 Total calculado:', total);
-            
-            const currentUser = userManager.getCurrentUser();
-            if (currentUser) {
-                console.log('👤 Usuario logueado:', currentUser.name);
-                const purchaseResult = userManager.addPurchase(currentUser.id, cart, total);
-                if (purchaseResult.success) {
-                    console.log('✅ Compra guardada en historial');
-                }
-            } else {
-                console.log('👤 Usuario no logueado - compra como invitado');
-            }
-            
-            try {
-                sessionStorage.setItem('checkoutCart', JSON.stringify(cart));
-                sessionStorage.setItem('cartTotal', total.toFixed(2));
-                console.log('💾 Datos guardados en sessionStorage');
-            } catch (error) {
-                console.error('❌ Error guardando en sessionStorage:', error);
-                alert('Error al procesar la compra. Intenta nuevamente.');
-                return;
-            }
-            
-            console.log('🔗 Intentando redirección a payment.html...');
-            
-            // Redirección con manejo de errores
-            setTimeout(() => {
-                try {
-                    window.location.href = 'payment.html';
-                } catch (error) {
-                    console.error('❌ Error en redirección:', error);
-                    alert('Error al cargar la página de pago. Verifica que payment.html exista.');
-                }
-            }, 100);
-        });
+        }
+    } else {
+        console.log('👤 Usuario no logueado - compra como invitado');
+        
+        // GA4 - Evento "Purchase" para usuarios invitados también
+        if (typeof gtag !== 'undefined') {
+            gtag('event', 'purchase', {
+                transaction_id: Date.now().toString(),
+                value: total,
+                currency: 'MXN',
+                items: cart.map(item => ({
+                    item_id: item.id,
+                    item_name: item.name,
+                    price: item.price,
+                    quantity: item.quantity
+                }))
+            });
+        }
+    }
+    
+    try {
+        sessionStorage.setItem('checkoutCart', JSON.stringify(cart));
+        sessionStorage.setItem('cartTotal', total.toFixed(2));
+        console.log('💾 Datos guardados en sessionStorage');
+    } catch (error) {
+        console.error('❌ Error guardando en sessionStorage:', error);
+        alert('Error al procesar la compra. Intenta nuevamente.');
+        return;
+    }
+    
+    console.log('🔗 Intentando redirección a payment.html...');
+    
+    // Redirección con manejo de errores
+    setTimeout(() => {
+        try {
+            window.location.href = 'payment.html';
+        } catch (error) {
+            console.error('❌ Error en redirección:', error);
+            alert('Error al cargar la página de pago. Verifica que payment.html exista.');
+        }
+    }, 100);
+});
 
         // ===== SISTEMA DE RECOMENDACIONES CON IA =====
         class AIRecommender {
@@ -1888,4 +1910,5 @@
         });
     </script>
 </body>
+</html>
 </html>
